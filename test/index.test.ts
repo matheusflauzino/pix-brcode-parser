@@ -26,6 +26,18 @@ describe('parseBRCode', () => {
     expect(result.type).toBe('STATIC');
   });
 
+  it('should default to static when tag 01 is missing', () => {
+    const codeWithoutTag =
+      '00020126370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc1236304ABCD';
+    const result = parseBRCode(codeWithoutTag);
+    expect(result.type).toBe('STATIC');
+  });
+
+  it('should detect dynamic codes when tag 01 is \"12\"', () => {
+    const result = parseBRCode(dynamicCode);
+    expect(result.type).toBe('DYNAMIC');
+  });
+
   it('should handle newlines and tabs', () => {
     const spaced = `\n${dynamicCode}\t`;
     const result = parseBRCode(spaced);
