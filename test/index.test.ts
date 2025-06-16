@@ -31,4 +31,36 @@ describe('parseBRCode', () => {
     const result = parseBRCode(spaced);
     expect(result.raw).toBe(dynamicCode);
   });
+
+  it('should parse different PIX key types', () => {
+    const codes = {
+      cpf:
+        '00020101021226330014BR.GOV.BCB.PIX0111123456789095204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506cpf0016304ABCD',
+      cnpj:
+        '00020101021226360014BR.GOV.BCB.PIX0114123456780001955204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862110507cnpj0026304ABCD',
+      phone:
+        '00020101021226360014BR.GOV.BCB.PIX0114+55119999999995204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506cel0036304ABCD',
+      email:
+        '00020101021226370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506email46304ABCD',
+      uuid:
+        '00020101021226580014BR.GOV.BCB.PIX0136550e8400-e29b-41d4-a716-4466554400005204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506uuid056304ABCD',
+    } as const;
+
+    const expectations = {
+      cpf: { key: '12345678909', txid: 'cpf001' },
+      cnpj: { key: '12345678000195', txid: 'cnpj002' },
+      phone: { key: '+5511999999999', txid: 'cel003' },
+      email: { key: 'abc@example.com', txid: 'email4' },
+      uuid: { key: '550e8400-e29b-41d4-a716-446655440000', txid: 'uuid05' },
+    } as const;
+
+    for (const [type, code] of Object.entries(codes)) {
+      const result = parseBRCode(code);
+      const { key, txid } = (expectations as any)[type];
+      expect(result.pixKey).toBe(key);
+      expect(result.merchantName).toBe('MATHEUS');
+      expect(result.transactionAmount).toBe(123.45);
+      expect(result.txid).toBe(txid);
+    }
+  });
 });
