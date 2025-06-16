@@ -7,6 +7,7 @@ describe('parseBRCode', () => {
     expect(result).toEqual({ raw: '000201' });
   });
 
+
   it('should handle newlines and tabs', () => {
     const result = parseBRCode('\n000201\t');
     expect(result).toEqual({ raw: '000201' });
