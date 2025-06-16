@@ -49,6 +49,28 @@ describe('parseBRCode', () => {
     expect(() => parseBRCode(invalid)).toThrowError('Invalid CRC16');
   });
 
+  it('should throw when mandatory tag 00 is missing', () => {
+    const codeWithout00 =
+      '01021226370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc1236304906E';
+    expect(() => parseBRCode(codeWithout00)).toThrowError('Tag obrigatória ausente: 00');
+  });
+
+  it('should throw when mandatory tag 26 is missing', () => {
+    const codeWithout26 =
+      '0002010102125204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc12363046BDE';
+    expect(() => parseBRCode(codeWithout26)).toThrowError('Tag obrigatória ausente: 26');
+  });
+
+  it('should throw on invalid TLV format', () => {
+    const invalidTLV = dynamicCode.slice(0, -1);
+    expect(() => parseBRCode(invalidTLV)).toThrowError('Invalid TLV format');
+  });
+
+  it('should throw on fields out of pattern', () => {
+    const weird = 'AA0201';
+    expect(() => parseBRCode(weird)).toThrowError('Campo fora do padrão');
+  });
+
   it('should parse different PIX key types', () => {
     const codes = {
       cpf:
