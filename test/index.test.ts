@@ -7,14 +7,14 @@ describe('parseBRCode', () => {
     expect(result).toEqual({ raw: '000201' });
   });
 
-  it('should handle newline and tab characters', () => {
+
+  it('should handle newlines and tabs', () => {
     const result = parseBRCode('\n000201\t');
     expect(result).toEqual({ raw: '000201' });
   });
 
   it('should return the same string when there is no whitespace', () => {
-    const input = '000201';
-    const result = parseBRCode(input);
-    expect(result).toEqual({ raw: input });
+    const result = parseBRCode('000201');
+    expect(result).toEqual({ raw: '000201' });
   });
 });
