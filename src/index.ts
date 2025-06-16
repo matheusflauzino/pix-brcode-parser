@@ -15,23 +15,23 @@ export function parseTLV(data: string): TLVData {
   return result;
 }
 
-export interface ParsedBRCode {
-  raw: string;
+export interface BRCodeData {
   type: 'STATIC' | 'DYNAMIC';
-  payloadFormatIndicator?: string;
+  payloadFormatIndicator: string;
   merchantCategoryCode?: string;
   transactionCurrency?: string;
-  transactionAmount?: string;
+  transactionAmount?: number;
   countryCode?: string;
   merchantName?: string;
   merchantCity?: string;
   postalCode?: string;
-  txid?: string;
   pixKey?: string;
   infoAdicional?: string;
+  txid?: string;
+  raw: string;
 }
 
-export function parseBRCode(brCode: string): ParsedBRCode {
+export function parseBRCode(brCode: string): BRCodeData {
   const sanitized = brCode.replace(/\s+/g, '');
   const tlv = parseTLV(sanitized);
 
@@ -60,10 +60,10 @@ export function parseBRCode(brCode: string): ParsedBRCode {
   return {
     raw: sanitized,
     type,
-    payloadFormatIndicator: tlv['00'],
+    payloadFormatIndicator: tlv['00'] || '',
     merchantCategoryCode: tlv['52'],
     transactionCurrency: tlv['53'],
-    transactionAmount: tlv['54'],
+    transactionAmount: tlv['54'] ? parseFloat(tlv['54']) : undefined,
     countryCode: tlv['58'],
     merchantName: tlv['59'],
     merchantCity: tlv['60'],
