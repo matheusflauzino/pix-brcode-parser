@@ -1,0 +1,25 @@
+{
+  "name": "pix-brcode-parser",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "pix", "brcode", "qrcode", "parser", "fintech", "emv", "bcb", "febraban"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  }
+}
