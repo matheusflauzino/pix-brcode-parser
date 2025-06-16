@@ -12,7 +12,7 @@ describe('parseBRCode', () => {
     expect(result.payloadFormatIndicator).toBe('01');
     expect(result.merchantCategoryCode).toBe('0000');
     expect(result.transactionCurrency).toBe('986');
-    expect(result.transactionAmount).toBe('123.45');
+    expect(result.transactionAmount).toBe(123.45);
     expect(result.countryCode).toBe('BR');
     expect(result.merchantName).toBe('MATHEUS');
     expect(result.merchantCity).toBe('SAOPAULO');
