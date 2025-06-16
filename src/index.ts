@@ -6,8 +6,23 @@ export function parseTLV(data: string): TLVData {
   const result: TLVData = {};
   let i = 0;
   while (i < data.length) {
+    if (i + 4 > data.length) {
+      throw new Error('Invalid TLV format: incomplete tag or length');
+    }
+
     const tag = data.slice(i, i + 2);
-    const length = parseInt(data.slice(i + 2, i + 4), 10);
+    const lengthStr = data.slice(i + 2, i + 4);
+
+    if (!/^\d{2}$/.test(tag) || !/^\d{2}$/.test(lengthStr)) {
+      throw new Error('Campo fora do padrão');
+    }
+
+    const length = parseInt(lengthStr, 10);
+
+    if (i + 4 + length > data.length) {
+      throw new Error('Invalid TLV format: length exceeds data size');
+    }
+
     const value = data.slice(i + 4, i + 4 + length);
     result[tag] = value;
     i += 4 + length;
@@ -51,6 +66,10 @@ export function parseBRCode(brCode: string): BRCodeData {
   const sanitized = brCode.replace(/\s+/g, '');
   const tlv = parseTLV(sanitized);
 
+  if (!tlv['00']) {
+    throw new Error('Tag obrigatória ausente: 00');
+  }
+
   if (tlv['63']) {
     const toCheck = sanitized.slice(0, sanitized.length - 4);
     const expected = tlv['63'].toUpperCase();
@@ -80,6 +99,10 @@ export function parseBRCode(brCode: string): BRCodeData {
         break;
       }
     }
+  }
+
+  if (!pixKey) {
+    throw new Error('Tag obrigatória ausente: 26');
   }
 
   return {
