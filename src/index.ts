@@ -31,9 +31,34 @@ export interface BRCodeData {
   raw: string;
 }
 
+export function computeCRC16(data: string): string {
+  let crc = 0xffff;
+  for (let i = 0; i < data.length; i++) {
+    crc ^= data.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if (crc & 0x8000) {
+        crc = (crc << 1) ^ 0x1021;
+      } else {
+        crc <<= 1;
+      }
+      crc &= 0xffff;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
 export function parseBRCode(brCode: string): BRCodeData {
   const sanitized = brCode.replace(/\s+/g, '');
   const tlv = parseTLV(sanitized);
+
+  if (tlv['63']) {
+    const toCheck = sanitized.slice(0, sanitized.length - 4);
+    const expected = tlv['63'].toUpperCase();
+    const calculated = computeCRC16(toCheck);
+    if (calculated !== expected) {
+      throw new Error(`Invalid CRC16: expected ${expected}, got ${calculated}`);
+    }
+  }
 
   const type: 'STATIC' | 'DYNAMIC' = tlv['01'] === '12' ? 'DYNAMIC' : 'STATIC';
 
