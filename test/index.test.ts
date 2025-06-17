@@ -117,4 +117,13 @@ describe('parseBRCode', () => {
     expect(result.txid).toBeUndefined();
     expect(result.pixKey).toBe('abc@example.com');
   });
+
+  it('should extract infoAdicional when subfield 02 is present', () => {
+    const body =
+      '00020101021226450014BR.GOV.BCB.PIX0115abc@example.com0204test5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc123';
+    const code = body + '6304' + computeCRC16(body + '6304');
+    const result = parseBRCode(code);
+    expect(result.infoAdicional).toBe('test');
+    expect(result.pixKey).toBe('abc@example.com');
+  });
 });
