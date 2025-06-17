@@ -20,4 +20,10 @@ describe('parseTLV', () => {
   it('throws when tag or length is not numeric', () => {
     expect(() => parseTLV('AA0201')).toThrowError('Campo fora do padrão')
   })
+
+  it('throws when tag or length field is incomplete', () => {
+    expect(() => parseTLV('00')).toThrowError(
+      'Invalid TLV format: incomplete tag or length',
+    )
+  })
 })
