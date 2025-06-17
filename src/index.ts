@@ -66,7 +66,7 @@ export function parseBRCode(brCode: string): BRCodeData {
   const sanitized = brCode.replace(/\s+/g, '');
   const tlv = parseTLV(sanitized);
 
-  if (!tlv['00']) {
+  if (!Object.prototype.hasOwnProperty.call(tlv, '00')) {
     throw new Error('Tag obrigatória ausente: 00');
   }
 
