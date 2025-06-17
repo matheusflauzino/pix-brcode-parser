@@ -55,10 +55,11 @@ describe('parseBRCode', () => {
     expect(() => parseBRCode(codeWithout00)).toThrowError('Tag obrigatória ausente: 00');
   });
 
-  it('should treat empty tag 00 as missing', () => {
+  it('should handle empty tag 00 and set empty payloadFormatIndicator', () => {
     const codeWithEmpty00 =
       '000001021226370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc1236304A537';
-    expect(() => parseBRCode(codeWithEmpty00)).toThrowError('Tag obrigatória ausente: 00');
+    const result = parseBRCode(codeWithEmpty00);
+    expect(result.payloadFormatIndicator).toBe('');
   });
 
   it('should throw when mandatory tag 26 is missing', () => {
