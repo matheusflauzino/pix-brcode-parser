@@ -1,5 +1,5 @@
 {
-  "name": "pix-brcode-parser",
+  "name": "@matheusflauzino/pix-brcode-parser",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,9 +22,9 @@
     "bcb",
     "febraban"
   ],
-  "author": "Seu Nome",
+  "author": "Matheus Flauzino",
   "license": "MIT",
-  "description": "",
+  "description": "Parser para BRCode do PIX que segue as especificações do Banco Central do Brasil. Suporta códigos estáticos e dinâmicos, validação de CRC16 e extração de dados como chave PIX, valor, beneficiário e mais.",
   "devDependencies": {
     "@types/node": "^24.0.3",
     "@vitest/coverage-v8": "^3.2.3",
