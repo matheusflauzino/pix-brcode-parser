@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseBRCode } from '../src';
+import { parseBRCode, computeCRC16 } from '../src';
 
 describe('parseBRCode', () => {
   const dynamicCode = '00020101021226370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO61081234567862100506abc12363042275';
@@ -101,5 +101,14 @@ describe('parseBRCode', () => {
       expect(result.transactionAmount).toBe(123.45);
       expect(result.txid).toBe(txid);
     }
+  });
+
+  it('should return undefined txid when tag 62 is absent', () => {
+    const body =
+      '00020101021226370014BR.GOV.BCB.PIX0115abc@example.com5204000053039865406123.455802BR5907MATHEUS6008SAOPAULO610812345678';
+    const code = body + '6304' + computeCRC16(body + '6304');
+    const result = parseBRCode(code);
+    expect(result.txid).toBeUndefined();
+    expect(result.pixKey).toBe('abc@example.com');
   });
 });
