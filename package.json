@@ -9,16 +9,25 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "pix", "brcode", "qrcode", "parser", "fintech", "emv", "bcb", "febraban"
+    "pix",
+    "brcode",
+    "qrcode",
+    "parser",
+    "fintech",
+    "emv",
+    "bcb",
+    "febraban"
   ],
   "author": "Seu Nome",
   "license": "MIT",
   "description": "",
   "devDependencies": {
     "@types/node": "^24.0.3",
+    "@vitest/coverage-v8": "^3.2.3",
     "typescript": "^5.8.3",
     "vitest": "^3.2.3"
   }
